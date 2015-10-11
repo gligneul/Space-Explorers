@@ -8,8 +8,8 @@
     main.lua
 --]]
 
-local Game = require "game"
-local Window = require "window"
+local Game = require "Game"
+local Window = require "Window"
 
 --- Game engine
 local game

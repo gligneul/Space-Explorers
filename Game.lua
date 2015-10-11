@@ -8,11 +8,10 @@
     game.lua
 --]]
 
-local Asteroid = require "asteroid"
-local Explosion = require "explosion"
-local Player = require "player"
-local Stars = require "stars"
-local Window = require "window"
+local Asteroid = require "Asteroid"
+local Explosion = require "Explosion"
+local Player = require "Player"
+local Stars = require "Stars"
 
 --- Class Game
 local Game = {}
@@ -57,7 +56,7 @@ function Game.create()
 
     local self = setmetatable({}, Game)
     self.stars = Stars.create()
-    self.player = Player.create(Window.WIDTH, Window.HEIGHT, player_shoot_cb)
+    self.player = Player.create(player_shoot_cb)
     self.player_projectiles = player_projectiles
     self.enemies = {}
     self.explosions = {}

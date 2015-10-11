@@ -8,8 +8,9 @@
     player.lua
 --]]
 
-local Ship = require "ship"
-local LaserBeam = require "laserbeam"
+local Ship = require "Ship"
+local LaserBeam = require "LaserBeam"
+local Window = require "Window"
 
 --- Class Player
 --- Represents the player of the game
@@ -35,15 +36,13 @@ local KEY_RIGHT = 'right'
 
 --- Creates a new Player
 --- Parameters
----   width         Windows width
----   height        Windows height
 ---   shootCallback Function that will be called when the player shoot
-function Player.create(width, height, shootCallback)
+function Player.create(shootCallback)
     local image = love.graphics.newImage(IMAGE_PATH)
     local image_w, image_h = image:getWidth(), image:getHeight()
     local self = setmetatable({}, Player)
-    self.ship = Ship.create(20, height / 2, 0, width - image_w, 0,
-                height - image_h, SPEED_LIMIT, ACCELERATION, image)
+    self.ship = Ship.create(50, Window.HEIGHT / 2, 0, Window.WIDTH- image_w, 0,
+                Window.HEIGHT - image_h, SPEED_LIMIT, ACCELERATION, image)
     self.shootCallback = shootCallback
     return setmetatable(self, Player)
 end

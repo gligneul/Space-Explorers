@@ -8,9 +8,9 @@
     asteroid.lua
 --]]
 
-local Animation = require "animation"
-local Rectangle = require "rectangle"
-local Window = require "window"
+local Animation = require "Animation"
+local Rectangle = require "Rectangle"
+local Window = require "Window"
 
 --- Class Asteroid
 --- Represents an asteroid projectile

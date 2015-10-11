@@ -8,7 +8,7 @@
     explosion.lua
 --]]
 
-local Animation = require "animation"
+local Animation = require "Animation"
 
 --- Class Explosion
 local Explosion = {}

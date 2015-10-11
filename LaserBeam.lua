@@ -8,7 +8,7 @@
     laserbeam.lua
 --]]
 
-local Window = require "window"
+local Window = require "Window"
 
 --- Class LaserBeam
 --- Represents a laser beam projectile

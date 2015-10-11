@@ -8,8 +8,8 @@
     ship.lua
 --]]
 
-local Engine = require "engine"
-local Rectangle = require "rectangle"
+local Engine = require "Engine"
+local Rectangle = require "Rectangle"
 
 --- Class Ship
 --- Represents a spaceship that can me moved by applying forces on it

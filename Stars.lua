@@ -8,7 +8,7 @@
     stars.lua
 --]]
 
-local Window = require "window"
+local Window = require "Window"
 
 --- Class Stars
 --- Represent the stars moving in the background
