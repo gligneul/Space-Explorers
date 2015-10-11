@@ -28,7 +28,7 @@ local Ship = {}
 function Ship.create(x, y, xmin, xmax, ymin, ymax, slimit, acc, image)
     local self = {
         xengine = Engine.create(x, xmin, xmax, slimit, acc),
-        yengine = Engine.create(y, xmin, xmax, slimit, acc),
+        yengine = Engine.create(y, ymin, ymax, slimit, acc),
         image = image
     }
     return setmetatable(self, {__index = Ship})

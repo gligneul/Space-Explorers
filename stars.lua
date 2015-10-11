@@ -8,29 +8,26 @@
     stars.lua
 --]]
 
+local Window = require "window"
+
 --- Class Stars
 --- Represent the stars moving in the background
 local Stars = {}
 
 --- Constants
-local N_STARS = 250
-local SPEED = 120
+Stars.N_STARS = 250
+Stars.SPEED = 120
 
 --- Creates a new star set
---- Parameters
----     width       Screen width
----     height      Screen height
-function Stars.create(width, height)
+function Stars.create()
     local self = {
         stars = {},
-        width = width,
-        height = height
     }
 
-    for i = 0, N_STARS do
+    for i = 0, Stars.N_STARS do
         table.insert(self.stars, {
-            x = math.random(width),
-            y = math.random(height)
+            x = math.random(Window.WIDTH),
+            y = math.random(Window.HEIGHT)
         })
     end
 
@@ -42,12 +39,12 @@ end
 ---     dt      Time elapsed in milliseconds
 function Stars:update(dt)
     for _, star in ipairs(self.stars) do
-        star.x = star.x - SPEED * dt
+        star.x = star.x - Stars.SPEED * dt
 
         -- If the star gets out of the screen reposition it at the begining
         if star.x < 0 then
-            star.x = self.width
-            star.y = math.random(self.height)
+            star.x = Window.WIDTH
+            star.y = math.random(Window.HEIGHT)
         end
     end
 end

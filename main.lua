@@ -8,51 +8,30 @@
     main.lua
 --]]
 
-local Player = require "player"
-local Stars = require "stars"
+local Game = require "game"
+local Window = require "window"
 
---- Constants
-local WIDTH = 1280
-local HEIGHT = 720
-
-local stars
-local player
-local player_projectiles = {}
-
-local function playerShootCallback(projectile)
-    table.insert(player_projectiles, projectile)
-end
+--- Game engine
+local game
 
 function love.load()
-    stars = Stars.create(WIDTH, HEIGHT)
-    player = Player.create(WIDTH, HEIGHT, playerShootCallback)
-    love.window.setMode(WIDTH, HEIGHT)
+    game = Game.create()
+    love.window.setMode(Window.WIDTH, Window.HEIGHT)
 end
 
 function love.draw()
-    stars:draw()
-    for _, p in pairs(player_projectiles) do
-        p:draw()
-    end
-    player:draw()
+    game:draw()
 end
 
 function love.update(dt)
-    stars:update(dt)
-    for _, p in ipairs(player_projectiles) do
-        p:update(dt)
-    end
-    player:update(dt)
+    game:update(dt)
 end
 
 function love.keypressed(key)
-    if key == 'escape' then
-        love.event.quit()
-    end
-    player:keypressed(key)
+    game:keypressed(key)
 end
 
 function love.keyreleased(key)
-    player:keyreleased(key)
+    game:keyreleased(key)
 end
 

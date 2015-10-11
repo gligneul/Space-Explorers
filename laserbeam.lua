@@ -8,6 +8,8 @@
     laserbeam.lua
 --]]
 
+local Window = require "window"
+
 --- Class LaserBeam
 --- Represents a laser beam projectile
 local LaserBeam = {}
@@ -15,7 +17,7 @@ local LaserBeam = {}
 --- Constants
 local SPEED = 500
 local HEIGHT = 1
-local WIDTH = 20
+local WIDTH = 15
 
 --- Creates a LaserBeam
 --- Parameters
@@ -27,7 +29,6 @@ function LaserBeam.create(x, y, direction, color)
     local self = {
         x = x,
         y = y,
-        isDead = false,
         direction = direction == 'right' and 1 or -1,
         color = color
     }
@@ -36,7 +37,7 @@ end
 
 --- Returns whether the projectile is offscreen
 function LaserBeam:isDead()
-    return self.isDead
+    return self.x > Window.WIDTH
 end
 
 --- Updates the laser beam position

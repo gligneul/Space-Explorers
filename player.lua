@@ -1,12 +1,12 @@
-    --[[
-        PUC-Rio
-        INF1405 - Construção de Sistemas 2015.2
-        Professor Edmundo Torreão
-        Gabriel de Quadros Ligneul 1212560
-        Exploradores de Andrômeda
+--[[
+    PUC-Rio
+    INF1405 - Construção de Sistemas 2015.2
+    Professor Edmundo Torreão
+    Gabriel de Quadros Ligneul 1212560
+    Exploradores de Andrômeda
 
-        player.lua
-    --]]
+    player.lua
+--]]
 
 local Ship = require "ship"
 local LaserBeam = require "laserbeam"
