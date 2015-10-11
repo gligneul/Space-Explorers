@@ -14,6 +14,7 @@ local LaserBeam = require "laserbeam"
 --- Class Player
 --- Represents the player of the game
 local Player = {}
+Player.__index = Player
 
 --- Constants
 local SPEED_LIMIT = 200
@@ -40,12 +41,11 @@ local KEY_RIGHT = 'right'
 function Player.create(width, height, shootCallback)
     local image = love.graphics.newImage(IMAGE_PATH)
     local image_w, image_h = image:getWidth(), image:getHeight()
-    local self = {
-        ship = Ship.create(20, height / 2, 0, width - image_w, 0,
-                height - image_h, SPEED_LIMIT, ACCELERATION, image),
-        shootCallback = shootCallback
-    }
-    return setmetatable(self, {__index = Player})
+    local self = setmetatable({}, Player)
+    self.ship = Ship.create(20, height / 2, 0, width - image_w, 0,
+                height - image_h, SPEED_LIMIT, ACCELERATION, image)
+    self.shootCallback = shootCallback
+    return setmetatable(self, Player)
 end
 
 --- Obtains the player bounding box

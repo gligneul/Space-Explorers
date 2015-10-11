@@ -13,6 +13,7 @@
 --- For instance, in the 2d world, it is necessary two engines: a vertical one
 --- and a horizontal one.
 local Engine = {}
+Engine.__index = Engine
 
 --- Auxiliary Function that clamps a value to a range
 local function clampValue(x, min, max)
@@ -32,16 +33,15 @@ end
 ---   slimit  Speed absolute maximum
 ---   a       Acceleration constant
 function Engine.create(p, pmin, pmax, slimit, a)
-    local self = {
-        p = p,
-        pmin = pmin,
-        pmax = pmax,
-        s = 0,
-        slimit = slimit,
-        a = a,
-        f = 0
-    }
-    return setmetatable(self, {__index = Engine})
+    local self = setmetatable({}, Engine)
+    self.p = p
+    self.pmin = pmin
+    self.pmax = pmax
+    self.s = 0
+    self.slimit = slimit
+    self.a = a
+    self.f = 0
+    return self
 end
 
 --- Updates the engine position by applying a force on it

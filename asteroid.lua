@@ -8,12 +8,14 @@
     asteroid.lua
 --]]
 
-local Window = require "window"
 local Animation = require "animation"
+local Rectangle = require "rectangle"
+local Window = require "window"
 
 --- Class Asteroid
 --- Represents an asteroid projectile
 local Asteroid = {}
+Asteroid.__index = Asteroid
 
 --- Constants
 Asteroid.ANIMATION_DT = 0.07
@@ -24,30 +26,36 @@ function Asteroid.init()
     Asteroid.images[1] = Animation.loadImages("data/asteroid_a_", ".png", 31)
     Asteroid.images[2] = Animation.loadImages("data/asteroid_b_", ".png", 31)
     Asteroid.default_width = Asteroid.images[1][1]:getWidth()
+    Asteroid.default_height = Asteroid.images[1][1]:getHeight()
 end
 
 --- Creates an asteroid at random position
 function Asteroid.create()
-    local images = Asteroid.images[math.random(#Asteroid.images)]
-    local scale = math.random(400, 1200) / 1000
-    local width = Asteroid.default_width * scale
-    local speed = math.random(150, 300)
-    local rotation_speed = (math.pi / 18)
-            * math.random(2, 8) * (math.random(2) == 1 and 1 or -1)
-    local x, y = Window.WIDTH + width, math.random(Window.HEIGHT)
-    local animation = Animation.create(images, Asteroid.ANIMATION_DT,
-                'repeat', x, y, 0, scale)
-
-    local self = {
-        x = x, width = width, speed = speed, alpha = 0,
-        rotation_speed = rotation_speed, animation = animation
-    }
-    return setmetatable(self, {__index = Asteroid})
+    local self = setmetatable({}, Asteroid)
+    self.images = Asteroid.images[math.random(#Asteroid.images)]
+    self.scale = math.random(400, 1200) / 1000
+    self.width = Asteroid.default_width * self.scale
+    self.height = Asteroid.default_height * self.scale
+    self.x = Window.WIDTH + self.width
+    self.y = math.random(Window.HEIGHT)
+    self.alpha = 0
+    self.speed = math.random(150, 300)
+    self.rotation_speed = (math.pi / 18) * math.random(2, 8)
+            * (math.random(2) == 1 and 1 or -1)
+    self.animation = Animation.create(self.images, Asteroid.ANIMATION_DT,
+                'repeat', self.x, self.y, self.alpha, self.scale)
+    return self
 end
 
 --- Returns whether the projectile is offscreen
 function Asteroid:isDead()
     return self.x < -self.width
+end
+
+--- Obtains the asteroidbounding box
+function Asteroid:getBBox()
+    return Rectangle.create(self.x - self.width / 2, self.y - self.height / 2,
+            self.width, self.height)
 end
 
 --- Updates the asteroid position

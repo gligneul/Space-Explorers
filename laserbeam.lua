@@ -13,6 +13,7 @@ local Window = require "window"
 --- Class LaserBeam
 --- Represents a laser beam projectile
 local LaserBeam = {}
+LaserBeam.__index = LaserBeam
 
 --- Constants
 local SPEED = 500
@@ -26,13 +27,12 @@ local WIDTH = 15
 ---   direction 'right' or 'left'
 ---   color     Laser color {r, g, b}
 function LaserBeam.create(x, y, direction, color)
-    local self = {
-        x = x,
-        y = y,
-        direction = direction == 'right' and 1 or -1,
-        color = color
-    }
-    return setmetatable(self, {__index = LaserBeam})
+    local self = setmetatable(self, LaserBeam)
+    self.x = x
+    self.y = y
+    self.direction = direction == 'right' and 1 or -1
+    self.color = color
+    return self
 end
 
 --- Returns whether the projectile is offscreen

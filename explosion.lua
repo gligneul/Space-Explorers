@@ -27,7 +27,7 @@ end
 --- Parameters
 ---   bBox      Explosion's bouding box
 function Explosion.create(bbox)
-    local scale = math.min(bbox.w / Explosion.width, bbox.h / Explosion.height)
+    local scale = math.min(Explosion.width / bbox.w, Explosion.height / bbox.h)
     return Animation.create(Explosion.images, Explosion.ANIMATION_DT, 'once',
             bbox.x, bbox.y, 0, scale)
 end

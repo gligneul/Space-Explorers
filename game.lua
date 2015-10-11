@@ -14,10 +14,11 @@ local Player = require "player"
 local Stars = require "stars"
 local Window = require "window"
 
--- Class Game
+--- Class Game
 local Game = {}
+Game.__index = Game
 
--- Auxiliary functions that updates a set
+--- Auxiliary functions that updates a set
 local function updateSet(set, dt)
     for e in pairs(set) do
         e:update(dt)
@@ -27,14 +28,24 @@ local function updateSet(set, dt)
     end
 end
 
--- Auxiliary function that draws a set
+--- Auxiliary function that draws a set
 local function drawSet(set)
     for e in pairs(set) do
         e:draw()
     end
 end
 
--- Creates a new Game
+--- Returns wheter if there is a colision with the bbox and the set
+local function hasColision(bbox, set)
+    for e in pairs(set) do
+        if bbox:intersects(e:getBBox()) then
+            return true
+        end
+    end
+    return false
+end
+
+--- Creates a new Game
 function Game.create()
     Asteroid.init()
     Explosion.init()
@@ -44,26 +55,37 @@ function Game.create()
         player_projectiles[projectile] = true
     end
 
-    local self = {
-        stars = Stars.create(),
-        player = Player.create(Window.WIDTH, Window.HEIGHT, player_shoot_cb),
-        player_projectiles = player_projectiles,
-        enemies = {},
-        explosions = {}
-    }
-    return setmetatable(self, {__index = Game})
+    local self = setmetatable({}, Game)
+    self.stars = Stars.create()
+    self.player = Player.create(Window.WIDTH, Window.HEIGHT, player_shoot_cb)
+    self.player_projectiles = player_projectiles
+    self.enemies = {}
+    self.explosions = {}
+    return self
 end
 
--- Updates the game
+--- Verifies if something colides with the player
+function Game:verifyPlayerColision()
+    local player_bbox = self.player:getBBox()
+    if hasColision(player_bbox, self.enemies) then
+        self.explosions[Explosion.create(player_bbox)] = true
+        self.player = nil
+    end
+end
+
+--- Updates the game
 function Game:update(dt)
     self.stars:update(dt)
     updateSet(self.player_projectiles, dt)
     updateSet(self.enemies, dt)
     updateSet(self.explosions, dt)
-    self.player:update(dt)
+    if self.player then 
+        self.player:update(dt)
+        self:verifyPlayerColision()
+    end
 end
 
--- Key pressed event
+--- Key pressed event
 function Game:keypressed(key)
     if key == 'escape' then
         love.event.quit()
@@ -72,12 +94,12 @@ function Game:keypressed(key)
         self.enemies[Asteroid.create()] = true
 
     end
-    self.player:keypressed(key)
+    if self.player then self.player:keypressed(key) end
 end
 
--- Key released event
+--- Key released event
 function Game:keyreleased(key)
-    self.player:keyreleased(key)
+    if self.player then self.player:keyreleased(key) end
 end
 
 -- Draws the game
@@ -86,7 +108,7 @@ function Game:draw()
     drawSet(self.player_projectiles)
     drawSet(self.enemies)
     drawSet(self.explosions)
-    self.player:draw()
+    if self.player then self.player:draw() end
 end
 
 return Game

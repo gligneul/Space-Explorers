@@ -10,6 +10,7 @@
 
 --- Class Animation
 local Animation = {}
+Animation.__index = Animation
 
 --- Loads the animation's images/frames
 ---   prefix    Images path prefix
@@ -37,18 +38,17 @@ end
 function Animation.create(frames, frame_dt, mode, x, y, alpha, scale)
     assert(frames ~= nil, "Frames cannot be null")
     assert(mode == 'repeat' or mode == 'once', "Invalid mode")
-    local self = {
-        frames = frames,
-        frame_dt = frame_dt,
-        time = 0,
-        mode = mode,
-        x = x,
-        y = y,
-        alpha = alpha,
-        scale = scale,
-        origin = frames[1]:getWidth() / 2
-    }
-    return setmetatable(self, {__index = Animation})
+    local self = setmetatable({}, Animation)
+    self.frames = frames
+    self.frame_dt = frame_dt
+    self.time = 0
+    self.mode = mode
+    self.x = x
+    self.y = y
+    self.alpha = alpha
+    self.scale = scale
+    self.origin = frames[1]:getWidth() / 2
+    return self
 end
 
 --- Obtains the current animation frame

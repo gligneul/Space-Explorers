@@ -13,6 +13,7 @@ local Window = require "window"
 --- Class Stars
 --- Represent the stars moving in the background
 local Stars = {}
+Stars.__index = Stars
 
 --- Constants
 Stars.N_STARS = 250
@@ -20,18 +21,15 @@ Stars.SPEED = 120
 
 --- Creates a new star set
 function Stars.create()
-    local self = {
-        stars = {},
-    }
-
+    local self = setmetatable({}, Stars)
+    self.stars = {}
     for i = 0, Stars.N_STARS do
         table.insert(self.stars, {
             x = math.random(Window.WIDTH),
             y = math.random(Window.HEIGHT)
         })
     end
-
-    return setmetatable(self, {__index = Stars})
+    return self
 end
 
 --- Updates the stars position based on the speed

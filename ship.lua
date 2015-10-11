@@ -9,10 +9,12 @@
 --]]
 
 local Engine = require "engine"
+local Rectangle = require "rectangle"
 
 --- Class Ship
 --- Represents a spaceship that can me moved by applying forces on it
 local Ship = {}
+Ship.__index = Ship
 
 --- Creates a new Ship
 --- Parameters
@@ -26,12 +28,11 @@ local Ship = {}
 ---   acc     Acceleration constant
 ---   image   Path for image that will be drawn
 function Ship.create(x, y, xmin, xmax, ymin, ymax, slimit, acc, image)
-    local self = {
-        xengine = Engine.create(x, xmin, xmax, slimit, acc),
-        yengine = Engine.create(y, ymin, ymax, slimit, acc),
-        image = image
-    }
-    return setmetatable(self, {__index = Ship})
+    local self = setmetatable({}, Ship)
+    self.xengine = Engine.create(x, xmin, xmax, slimit, acc)
+    self.yengine = Engine.create(y, ymin, ymax, slimit, acc)
+    self.image = image
+    return self
 end
 
 --- Sets the x force
@@ -50,12 +51,9 @@ end
 
 --- Obtains the ship bounding box
 function Ship:getBBox()
-    return {
-        x = self.xengine:getPosition(),
-        y = self.yengine:getPosition(),
-        w = self.image:getWidth(),
-        h = self.image:getHeight()
-    }
+    return Rectangle.create(self.xengine:getPosition(), 
+            self.yengine:getPosition(), self.image:getWidth(),
+            self.image:getHeight())
 end
 
 --- Updates the ship position
