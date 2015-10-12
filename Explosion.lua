@@ -5,12 +5,13 @@
     Gabriel de Quadros Ligneul 1212560
     Exploradores de Andrômeda
 
-    explosion.lua
+    Explosion.lua
 --]]
 
 local Animation = require "Animation"
 
 --- Class Explosion
+--- Pseudo class that encapsulates an animation
 local Explosion = {}
 
 --- Constants

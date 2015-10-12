@@ -8,45 +8,39 @@
     Destroyable.lua
 --]]
 
+local Class = require "Class"
+local Rectangle = require "Rectangle"
+
 --- Class Destroyable
 --- Superclass for managing an element life
-local Destroyable = {}
-Destroyable.__index = Destroyable
+local Destroyable = Class()
 
 --- Creates a new Destroyable
 --- Parameters
----   bbox      Element bounding box
 ---   life      Initial life
-function Destroyable.create(bbox, life)
-    local self = setmetatable({}, Destroyable)
-    self.bbox = bbox
+function Destroyable.create(life)
+    local self = Destroyable._create()
     self.total_life = life
     self.life = life
     return self
 end
 
 --- Hits the element
-function Destroyable.hit(damage)
+function Destroyable:hit(damage)
     self.life = self.life - damage
 end
 
 --- Returns whether the element is destroyed
-function Destroyable.isDestroyed()
+function Destroyable:isDestroyed()
     return self.life <= 0
 end
 
---- Sets the bounding box
-function Destroyable.setBBox(bbox)
-    self.bbox = bbox
-end
-
 --- Draws the life bar above the element
-function Destroyable.draw()
-    local base_w = 0.5 * self.bbox.w
-    local w = base_w * (self.life / self.total_life)
+function Destroyable:draw(bbox)
+    local w = 0.5 * bbox.w * (self.life / self.total_life)
     local h = 2
-    local x = (self.bbox.x + self.bbox.w) / 2 - base_w
-    local y = self.bbox.y - 10
+    local x = bbox.x + 0.25 * bbox.w
+    local y = bbox.y - 5
     love.graphics.setColor(0, 255, 0)
     love.graphics.rectangle('fill', x, y, w, h)
 end

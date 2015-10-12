@@ -5,15 +5,15 @@
     Gabriel de Quadros Ligneul 1212560
     Exploradores de Andrômeda
 
-    stars.lua
+    Stars.lua
 --]]
 
+local Class = require "Class"
 local Window = require "Window"
 
 --- Class Stars
 --- Represent the stars moving in the background
-local Stars = {}
-Stars.__index = Stars
+local Stars = Class()
 
 --- Constants
 Stars.N_STARS = 250
@@ -21,7 +21,7 @@ Stars.SPEED = 120
 
 --- Creates a new star set
 function Stars.create()
-    local self = setmetatable({}, Stars)
+    local self = Stars._create()
     self.stars = {}
     for i = 0, Stars.N_STARS do
         table.insert(self.stars, {

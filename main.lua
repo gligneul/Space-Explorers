@@ -7,7 +7,6 @@
 
     main.lua
 --]]
-
 local Game = require "Game"
 local Window = require "Window"
 
@@ -28,7 +27,7 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
-    game:keypressed(key)
+   game:keypressed(key)
 end
 
 function love.keyreleased(key)

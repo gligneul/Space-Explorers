@@ -5,12 +5,13 @@
     Gabriel de Quadros Ligneul 1212560
     Exploradores de Andrômeda
 
-    animation.lua
+    Animation.lua
 --]]
 
+local Class = require "Class"
+
 --- Class Animation
-local Animation = {}
-Animation.__index = Animation
+local Animation = Class()
 
 --- Loads the animation's images/frames
 ---   prefix    Images path prefix
@@ -38,7 +39,8 @@ end
 function Animation.create(frames, frame_dt, mode, x, y, alpha, scale)
     assert(frames ~= nil, "Frames cannot be null")
     assert(mode == 'repeat' or mode == 'once', "Invalid mode")
-    local self = setmetatable({}, Animation)
+
+    local self = Animation._create()
     self.frames = frames
     self.frame_dt = frame_dt
     self.time = 0

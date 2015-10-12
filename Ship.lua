@@ -5,16 +5,16 @@
     Gabriel de Quadros Ligneul 1212560
     Exploradores de Andrômeda
 
-    ship.lua
+    Ship.lua
 --]]
 
+local Class = require "Class"
 local Engine = require "Engine"
 local Rectangle = require "Rectangle"
 
 --- Class Ship
 --- Represents a spaceship that can me moved by applying forces on it
-local Ship = {}
-Ship.__index = Ship
+local Ship = Class()
 
 --- Creates a new Ship
 --- Parameters
@@ -28,7 +28,7 @@ Ship.__index = Ship
 ---   acc     Acceleration constant
 ---   image   Path for image that will be drawn
 function Ship.create(x, y, xmin, xmax, ymin, ymax, slimit, acc, image)
-    local self = setmetatable({}, Ship)
+    local self = Ship._create()
     self.xengine = Engine.create(x, xmin, xmax, slimit, acc)
     self.yengine = Engine.create(y, ymin, ymax, slimit, acc)
     self.image = image

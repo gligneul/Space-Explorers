@@ -5,15 +5,16 @@
     Gabriel de Quadros Ligneul 1212560
     Exploradores de Andrômeda
 
-    engine.lua
+    Engine.lua
 --]]
+
+local Class = require "Class"
 
 --- Class Engine
 --- It is used to control the spaceship position and speed in a single axis.
 --- For instance, in the 2d world, it is necessary two engines: a vertical one
 --- and a horizontal one.
-local Engine = {}
-Engine.__index = Engine
+local Engine = Class()
 
 --- Auxiliary Function that clamps a value to a range
 local function clampValue(x, min, max)
@@ -33,7 +34,7 @@ end
 ---   slimit  Speed absolute maximum
 ---   a       Acceleration constant
 function Engine.create(p, pmin, pmax, slimit, a)
-    local self = setmetatable({}, Engine)
+    local self = Engine._create()
     self.p = p
     self.pmin = pmin
     self.pmax = pmax

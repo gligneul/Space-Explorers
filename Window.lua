@@ -5,7 +5,7 @@
     Gabriel de Quadros Ligneul 1212560
     Exploradores de Andrômeda
 
-    window.lua
+    Window.lua
 --]]
 
 --- Global constants

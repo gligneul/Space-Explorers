@@ -5,15 +5,15 @@
     Gabriel de Quadros Ligneul 1212560
     Exploradores de Andrômeda
 
-    laserbeam.lua
+    LaserBeam.lua
 --]]
 
+local Class = require "Class"
 local Window = require "Window"
 
 --- Class LaserBeam
 --- Represents a laser beam projectile
-local LaserBeam = {}
-LaserBeam.__index = LaserBeam
+local LaserBeam = Class()
 
 --- Constants
 local SPEED = 500
@@ -27,7 +27,7 @@ local WIDTH = 15
 ---   direction 'right' or 'left'
 ---   color     Laser color {r, g, b}
 function LaserBeam.create(x, y, direction, color)
-    local self = setmetatable(self, LaserBeam)
+    local self = LaserBeam._create()
     self.x = x
     self.y = y
     self.direction = direction == 'right' and 1 or -1

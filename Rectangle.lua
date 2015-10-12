@@ -5,12 +5,13 @@
     Gabriel de Quadros Ligneul 1212560
     Exploradores de Andrômeda
 
-    rectangle.lua
+    Rectangle.lua
 --]]
 
+local Class = require "Class"
+
 --- Class Animation
-local Rectangle = {}
-Rectangle.__index = Rectangle
+local Rectangle = Class()
 
 --- Creates an new Rectangle
 ---   x         Top x coordinate
@@ -18,8 +19,12 @@ Rectangle.__index = Rectangle
 ---   w         Width
 ---   h         Height
 function Rectangle.create(x, y, w, h)
-    local self = {x = x, y = y, w = w, h = h}
-    return setmetatable(self, Rectangle)
+    local self = Rectangle._create()
+    self.x = x
+    self.y = y
+    self.w = w
+    self.h = h
+    return self
 end
 
 --- Collision detection function

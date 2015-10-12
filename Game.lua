@@ -5,17 +5,17 @@
     Gabriel de Quadros Ligneul 1212560
     Exploradores de Andrômeda
 
-    game.lua
+    Game.lua
 --]]
 
 local Asteroid = require "Asteroid"
+local Class = require "Class"
 local Explosion = require "Explosion"
 local Player = require "Player"
 local Stars = require "Stars"
 
 --- Class Game
-local Game = {}
-Game.__index = Game
+local Game = Class()
 
 --- Auxiliary functions that updates a set
 local function updateSet(set, dt)
@@ -49,15 +49,12 @@ function Game.create()
     Asteroid.init()
     Explosion.init()
 
-    local player_projectiles = {}
-    local function player_shoot_cb(projectile)
-        player_projectiles[projectile] = true
-    end
-
-    local self = setmetatable({}, Game)
+    local self = Game._create()
     self.stars = Stars.create()
-    self.player = Player.create(player_shoot_cb)
-    self.player_projectiles = player_projectiles
+    self.player_projectiles = {}
+    self.player = Player.create(function(projectile)
+        self.player_projectiles[projectile] = true
+    end)
     self.enemies = {}
     self.explosions = {}
     return self

@@ -5,20 +5,22 @@
     Gabriel de Quadros Ligneul 1212560
     Exploradores de Andrômeda
 
-    asteroid.lua
+    Asteroid.lua
 --]]
 
 local Animation = require "Animation"
+local Class = require "Class"
+local Destroyable = require "Destroyable"
 local Rectangle = require "Rectangle"
 local Window = require "Window"
 
 --- Class Asteroid
 --- Represents an asteroid projectile
-local Asteroid = {}
-Asteroid.__index = Asteroid
+local Asteroid = Class(Destroyable)
 
 --- Constants
 Asteroid.ANIMATION_DT = 0.07
+Asteroid.BASE_LIFE = 100
 
 --- Initializes the shared data (animation)
 function Asteroid.init()
@@ -31,31 +33,32 @@ end
 
 --- Creates an asteroid at random position
 function Asteroid.create()
-    local self = setmetatable({}, Asteroid)
-    self.images = Asteroid.images[math.random(#Asteroid.images)]
-    self.scale = math.random(400, 1200) / 1000
-    self.width = Asteroid.default_width * self.scale
-    self.height = Asteroid.default_height * self.scale
-    self.x = Window.WIDTH + self.width
+    local scale = math.random(600, 1000) / 1000
+    local life = Asteroid.BASE_LIFE * scale
+    local self = Asteroid._create(life)
+    self.w = Asteroid.default_width * scale
+    self.h = Asteroid.default_height * scale
+    self.x = Window.WIDTH + self.w
     self.y = math.random(Window.HEIGHT)
+    self.images = Asteroid.images[math.random(#Asteroid.images)]
     self.alpha = 0
     self.speed = math.random(150, 300)
     self.rotation_speed = (math.pi / 18) * math.random(2, 8)
             * (math.random(2) == 1 and 1 or -1)
     self.animation = Animation.create(self.images, Asteroid.ANIMATION_DT,
-                'repeat', self.x, self.y, self.alpha, self.scale)
+                'repeat', self.x, self.y, self.alpha, scale)
     return self
 end
 
 --- Returns whether the projectile is offscreen
 function Asteroid:isDead()
-    return self.x < -self.width
+    return self.x < -self.w
 end
 
 --- Obtains the asteroidbounding box
 function Asteroid:getBBox()
-    return Rectangle.create(self.x - self.width / 2, self.y - self.height / 2,
-            self.width, self.height)
+    return Rectangle.create(self.x - self.w / 2, self.y - self.h / 2,
+            self.w, self.h)
 end
 
 --- Updates the asteroid position
@@ -71,7 +74,9 @@ end
 
 --- Draws the asteroid
 function Asteroid:draw()
+    local bbox = self:getBBox()
     self.animation:draw()
+    self:_super(bbox)
 end
 
 return Asteroid

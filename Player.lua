@@ -5,17 +5,17 @@
     Gabriel de Quadros Ligneul 1212560
     Exploradores de Andrômeda
 
-    player.lua
+    Player.lua
 --]]
 
-local Ship = require "Ship"
+local Class = require "Class"
 local LaserBeam = require "LaserBeam"
+local Ship = require "Ship"
 local Window = require "Window"
 
 --- Class Player
 --- Represents the player of the game
-local Player = {}
-Player.__index = Player
+local Player = Class()
 
 --- Constants
 local SPEED_LIMIT = 200
@@ -40,7 +40,7 @@ local KEY_RIGHT = 'right'
 function Player.create(shootCallback)
     local image = love.graphics.newImage(IMAGE_PATH)
     local image_w, image_h = image:getWidth(), image:getHeight()
-    local self = setmetatable({}, Player)
+    local self = Player._create()
     self.ship = Ship.create(50, Window.HEIGHT / 2, 0, Window.WIDTH- image_w, 0,
                 Window.HEIGHT - image_h, SPEED_LIMIT, ACCELERATION, image)
     self.shootCallback = shootCallback
