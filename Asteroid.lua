@@ -47,7 +47,7 @@ function Asteroid.create()
     self.x = Window.WIDTH + self.w
     self.y = math.random(Window.HEIGHT)
     self.alpha = 0
-    self.speed = math.random(150, 300)
+    self.speed = math.random(100, 200)
     self.rotation_speed = (math.pi / 18) * math.random(2, 8)
             * (math.random(2) == 1 and 1 or -1)
     self.animation = Animation.create(images, Asteroid.ANIMATION_DT,

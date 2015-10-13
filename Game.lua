@@ -83,7 +83,7 @@ function Game:update(dt)
     self.asteroid_time = self.asteroid_time + dt
     if self.asteroid_time > self.asteroid_next then
         self.asteroid_time = 0
-        self.asteroid_next = 0.5
+        self.asteroid_next = 1
         self.enemies[Asteroid.create()] = true
     end
 end
