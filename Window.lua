@@ -8,7 +8,7 @@
     Window.lua
 --]]
 
---- Global constants
+--- Global constants related to the window
 local Window = {}
 
 Window.WIDTH = 1280

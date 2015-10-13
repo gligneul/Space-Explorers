@@ -10,12 +10,6 @@
 
 local Class = require "Class"
 
---- Class Engine
---- It is used to control the spaceship position and speed in a single axis.
---- For instance, in the 2d world, it is necessary two engines: a vertical one
---- and a horizontal one.
-local Engine = Class()
-
 --- Auxiliary Function that clamps a value to a range
 local function clampValue(x, min, max)
     if x > max then
@@ -25,6 +19,12 @@ local function clampValue(x, min, max)
     end
     return x
 end
+
+--- Class Engine
+--- It is used to control the spaceship position and speed in a single axis.
+--- For instance, in the 2d world, it is necessary two engines: a vertical one
+--- and a horizontal one.
+local Engine = Class()
 
 --- Creates a new Engine
 --- Parameters

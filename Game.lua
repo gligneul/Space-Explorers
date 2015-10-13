@@ -10,8 +10,8 @@
 
 local Asteroid = require "Asteroid"
 local Class = require "Class"
-local Explosion = require "Explosion"
 local Player = require "Player"
+local Ship = require "Ship"
 local Stars = require "Stars"
 
 --- Class Game
@@ -37,7 +37,7 @@ end
 --- Creates a new Game
 function Game.create()
     Asteroid.init()
-    Explosion.init()
+    Ship.init()
 
     local self = Game._create()
     self.stars = Stars.create()
@@ -53,6 +53,14 @@ end
 
 --- Verifies the colisions between the allies and the enemies
 function Game:computeColisions()
+    for ally in pairs(self.allies) do
+        for enemy in pairs(self.enemies) do
+            if ally:getBBox():intersects(enemy:getBBox()) then
+                ally:hit(enemy:getDamage())
+                enemy:hit(ally:getDamage())
+            end
+        end
+    end
 end
 
 --- Updates the game

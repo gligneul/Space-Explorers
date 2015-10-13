@@ -56,4 +56,3 @@ function Stars:draw()
 end
 
 return Stars
-

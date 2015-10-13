@@ -1,7 +1,7 @@
-ni=8
-nj=8
-dim=256
-img="asteroid"
+ni=5
+nj=5
+dim=64
+img="asteroid_explosion"
 
 for i in $(seq $ni); do
     for j in $(seq $nj); do

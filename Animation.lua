@@ -86,7 +86,7 @@ end
 
 --- Draws the current frame
 function Animation:draw()
-    if self.mode == 'repeat' or not self:isOffscreen() then
+    if self.mode == 'repeat' or not self:isOver() then
         love.graphics.setColor(255, 255, 255)
         local frame_number = self:getFrameNumber()
         local frame = self.frames[1 + (frame_number - 1) % #self.frames]

@@ -17,12 +17,6 @@ return function(super)
     if super then
         -- If a method is not found, search it in the super class
         setmetatable(class, super)
-
-        -- Calls the super's class method
-        function class:_super(...)
-            local f = debug.getinfo(2, "n").name
-            return super[f](self, ...)
-        end
     end
 
     -- Creates an empty object

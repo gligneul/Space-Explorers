@@ -9,16 +9,20 @@
 --]]
 
 local Class = require "Class"
+local Rectangle = require "Rectangle"
+local SpaceElement = require "SpaceElement"
 local Window = require "Window"
 
 --- Class LaserBeam
 --- Represents a laser beam projectile
-local LaserBeam = Class()
+local LaserBeam = Class(SpaceElement)
 
 --- Constants
-local SPEED = 500
-local HEIGHT = 1
-local WIDTH = 15
+LaserBeam.LIFE = 1
+LaserBeam.DAMAGE = 25
+LaserBeam.SPEED = 500
+LaserBeam.HEIGHT = 1
+LaserBeam.WIDTH = 15
 
 --- Creates a LaserBeam
 --- Parameters
@@ -27,30 +31,38 @@ local WIDTH = 15
 ---   direction 'right' or 'left'
 ---   color     Laser color {r, g, b}
 function LaserBeam.create(x, y, direction, color)
-    local self = LaserBeam._create()
+    assert(direction == 'right' or direction == 'left', "Invalid direction")
+
+    local self = LaserBeam._create(LaserBeam.LIFE, LaserBeam.DAMAGE)
     self.x = x
     self.y = y
-    self.direction = direction == 'right' and 1 or -1
+    self.direction = (direction == 'right' and 1 or -1)
     self.color = color
     return self
 end
 
---- Returns whether the projectile is offscreen
+--- Returns whether the element can be removed from the game
 function LaserBeam:isOffscreen()
-    return self.x > Window.WIDTH
+    return self.x > Window.WIDTH or self:isDestroyed()
+end
+
+--- Obtains the element bounding box
+function LaserBeam:getBBox()
+    return Rectangle.create(self.x, self.y, LaserBeam.WIDTH, LaserBeam.HEIGHT)
 end
 
 --- Updates the laser beam position
 --- Parameters
 ---   dt      Time elapsed in milliseconds
 function LaserBeam:update(dt)
-    self.x = self.x + self.direction * SPEED * dt
+    self.x = self.x + self.direction * LaserBeam.SPEED * dt
 end
 
 --- Draws the laser beam
 function LaserBeam:draw()
     love.graphics.setColor(self.color)
-    love.graphics.rectangle('fill', self.x, self.y, WIDTH, HEIGHT)
+    love.graphics.rectangle('fill', self.x, self.y, LaserBeam.WIDTH,
+            LaserBeam.HEIGHT)
 end
 
 return LaserBeam
