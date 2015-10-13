@@ -13,6 +13,7 @@ local Class = require "Class"
 local Player = require "Player"
 local Ship = require "Ship"
 local Stars = require "Stars"
+local Window = require "Window"
 
 --- Class Game
 local Game = Class()
@@ -48,6 +49,11 @@ function Game.create()
     self.allies[self.player] = true
     self.enemies = {}
     self.explosions = {}
+    self.gameover_font = love.graphics.newFont("data/zorque.ttf", 100)
+
+    -- Asteroid launcher
+    self.asteroid_time = 0
+    self.asteroid_next = 0
     return self
 end
 
@@ -55,7 +61,9 @@ end
 function Game:computeColisions()
     for ally in pairs(self.allies) do
         for enemy in pairs(self.enemies) do
-            if ally:getBBox():intersects(enemy:getBBox()) then
+            if ally:getBBox():intersects(enemy:getBBox())
+               and not ally:isDestroyed()
+               and not enemy:isDestroyed() then
                 ally:hit(enemy:getDamage())
                 enemy:hit(ally:getDamage())
             end
@@ -71,8 +79,12 @@ function Game:update(dt)
     updateSet(self.explosions, dt)
     self:computeColisions()
 
-    if self.player:isDestroyed() then
-        print("Game Over!")
+    -- Asteroid launcher
+    self.asteroid_time = self.asteroid_time + dt
+    if self.asteroid_time > self.asteroid_next then
+        self.asteroid_time = 0
+        self.asteroid_next = 0.5
+        self.enemies[Asteroid.create()] = true
     end
 end
 
@@ -80,10 +92,6 @@ end
 function Game:keypressed(key)
     if key == 'escape' then
         love.event.quit()
-
-    elseif key == 'a' then
-        self.enemies[Asteroid.create()] = true
-
     end
     self.player:keypressed(key)
 end
@@ -99,6 +107,13 @@ function Game:draw()
     drawSet(self.allies)
     drawSet(self.enemies)
     drawSet(self.explosions)
+
+    if self.player:isDestroyed() then
+        love.graphics.setColor(255, 255, 255)
+        love.graphics.setFont(self.gameover_font)
+        love.graphics.printf("Game Over", (Window.WIDTH - 500) / 2,
+                -100 + Window.HEIGHT / 2, 500, 'center')
+    end
 end
 
 return Game

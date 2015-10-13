@@ -62,7 +62,7 @@ function Player:keypressed(key)
         self:addXForce(1)
     elseif key == Player.KEY_SHOOT then
         local bbox = self:getBBox()
-        local x, y = bbox.x, bbox.y + bbox.h / 2
+        local x, y = bbox.x + bbox.w, bbox.y + bbox.h / 2
         local laser = LaserBeam.create(x, y, 'right', {0, 255, 0})
         self.shootCallback(laser)
     end

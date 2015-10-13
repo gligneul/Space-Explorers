@@ -19,7 +19,7 @@ local Window = require "Window"
 local Asteroid = Class(SpaceElement)
 
 --- Constants
-Asteroid.LIFE = 200
+Asteroid.LIFE = 300
 Asteroid.DAMAGE = 99999
 Asteroid.ANIMATION_DT = 0.07
 Asteroid.EXPLOSION_DT = 0.02
@@ -38,7 +38,7 @@ end
 
 --- Creates an asteroid at random position
 function Asteroid.create()
-    local scale = math.random(600, 1000) / 1000
+    local scale = math.random(300, 600) / 1000
     local life = Asteroid.LIFE * scale
     local images = Asteroid.images[math.random(#Asteroid.images)]
     local self = Asteroid._create(life, Asteroid.DAMAGE)
