@@ -10,6 +10,9 @@
 
 local Class = require "Class"
 
+--- Auxiliary linear interpolation funciton
+local function lerp(a,b,t) return (1-t)*a + t*b end
+
 --- Class SpaceElement
 --- Base class for managing a space element
 local SpaceElement = Class()
@@ -44,11 +47,14 @@ end
 --- Draws the life bar above the element
 function SpaceElement:draw()
     local bbox = self:getBBox()
-    local w = 0.5 * bbox.w * (self.life / self.initial_life)
+    local life_percent = (self.life / self.initial_life)
+    local w = 0.5 * bbox.w * life_percent
     local h = 2
     local x = bbox.x + 0.25 * bbox.w
     local y = bbox.y - 10
-    love.graphics.setColor(0, 255, 0)
+    local red = lerp(255, 0, life_percent)
+    local green = lerp(0, 255, life_percent)
+    love.graphics.setColor(red, green, 0)
     love.graphics.rectangle('fill', x, y, w, h)
 end
 
