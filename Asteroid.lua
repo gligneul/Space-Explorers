@@ -51,8 +51,13 @@ function Asteroid.create()
 end
 
 --- Returns whether the projectile is offscreen
-function Asteroid:isDead()
+function Asteroid:isOffscreen()
     return self.x < -self.w
+end
+
+--- Returns the damage caused on hit
+function Asteroid:getDamage()
+    return 99999
 end
 
 --- Obtains the asteroidbounding box
@@ -74,9 +79,8 @@ end
 
 --- Draws the asteroid
 function Asteroid:draw()
-    local bbox = self:getBBox()
     self.animation:draw()
-    self:_super(bbox)
+    self:_super()
 end
 
 return Asteroid

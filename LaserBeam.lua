@@ -36,7 +36,7 @@ function LaserBeam.create(x, y, direction, color)
 end
 
 --- Returns whether the projectile is offscreen
-function LaserBeam:isDead()
+function LaserBeam:isOffscreen()
     return self.x > Window.WIDTH
 end
 

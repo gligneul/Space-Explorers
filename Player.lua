@@ -10,22 +10,24 @@
 
 local Class = require "Class"
 local LaserBeam = require "LaserBeam"
+local Destroyable = require "Destroyable"
 local Ship = require "Ship"
 local Window = require "Window"
 
 --- Class Player
 --- Represents the player of the game
-local Player = Class()
+local Player = Class(Destroyable)
 
 --- Constants
-local SPEED_LIMIT = 200
-local ACCELERATION = 1000
-local IMAGE_PATH = "data/player.png"
-local KEY_UP = 'k'
-local KEY_DOWN = 'j'
-local KEY_LEFT = 'l'
-local KEY_RIGHT = 'h'
-local KEY_SHOOT = ' '
+Player.LIFE = 500
+Player.SPEED_LIMIT = 200
+Player.ACCELERATION = 1000
+Player.IMAGE_PATH = "data/player.png"
+Player.KEY_UP = 'k'
+Player.KEY_DOWN = 'j'
+Player.KEY_LEFT = 'l'
+Player.KEY_RIGHT = 'h'
+Player.KEY_SHOOT = ' '
 
 --[[ Uncomment for arrow keys constants:
 local KEY_UP = 'up'
@@ -38,13 +40,19 @@ local KEY_RIGHT = 'right'
 --- Parameters
 ---   shootCallback Function that will be called when the player shoot
 function Player.create(shootCallback)
-    local image = love.graphics.newImage(IMAGE_PATH)
+    local image = love.graphics.newImage(Player.IMAGE_PATH)
     local image_w, image_h = image:getWidth(), image:getHeight()
-    local self = Player._create()
+    local self = Player._create(Player.LIFE)
     self.ship = Ship.create(50, Window.HEIGHT / 2, 0, Window.WIDTH- image_w, 0,
-                Window.HEIGHT - image_h, SPEED_LIMIT, ACCELERATION, image)
+            Window.HEIGHT - image_h, Player.SPEED_LIMIT, Player.ACCELERATION,
+            image)
     self.shootCallback = shootCallback
     return setmetatable(self, Player)
+end
+
+--- Returns whether the element is offscreen
+function Player:isOffscreen()
+    return false
 end
 
 --- Obtains the player bounding box
@@ -63,15 +71,15 @@ end
 --- Parameters
 ---   key       Key pressed
 function Player:keypressed(key)
-    if key == KEY_UP then
+    if key == Player.KEY_UP then
         self.ship:addYForce(-1)
-    elseif key == KEY_DOWN then
+    elseif key == Player.KEY_DOWN then
         self.ship:addYForce(1)
-    elseif key == KEY_RIGHT then
+    elseif key == Player.KEY_RIGHT then
         self.ship:addXForce(-1)
-    elseif key == KEY_LEFT then
+    elseif key == Player.KEY_LEFT then
         self.ship:addXForce(1)
-    elseif key == KEY_SHOOT then
+    elseif key == Player.KEY_SHOOT then
         local bbox = self.ship:getBBox()
         local x, y = bbox.x, bbox.y + bbox.h / 2
         local laser = LaserBeam.create(x, y, 'right', {0, 255, 0})
@@ -83,13 +91,13 @@ end
 --- Parameters
 ---   key       Key released
 function Player:keyreleased(key)
-    if key == KEY_UP then
+    if key == Player.KEY_UP then
         self.ship:addYForce(1)
-    elseif key == KEY_DOWN then
+    elseif key == Player.KEY_DOWN then
         self.ship:addYForce(-1)
-    elseif key == KEY_RIGHT then
+    elseif key == Player.KEY_RIGHT then
         self.ship:addXForce(1)
-    elseif key == KEY_LEFT then
+    elseif key == Player.KEY_LEFT then
         self.ship:addXForce(-1)
     end
 end
@@ -97,6 +105,7 @@ end
 --- Draws the player
 function Player:draw()
     self.ship:draw()
+    self:_super()
 end
 
 return Player

@@ -21,7 +21,7 @@ local Game = Class()
 local function updateSet(set, dt)
     for e in pairs(set) do
         e:update(dt)
-        if e:isDead() then
+        if e:isOffscreen() then
             set[e] = nil
         end
     end
@@ -34,16 +34,6 @@ local function drawSet(set)
     end
 end
 
---- Returns wheter if there is a colision with the bbox and the set
-local function hasColision(bbox, set)
-    for e in pairs(set) do
-        if bbox:intersects(e:getBBox()) then
-            return true
-        end
-    end
-    return false
-end
-
 --- Creates a new Game
 function Game.create()
     Asteroid.init()
@@ -51,33 +41,30 @@ function Game.create()
 
     local self = Game._create()
     self.stars = Stars.create()
-    self.player_projectiles = {}
+    self.allies = {}
     self.player = Player.create(function(projectile)
-        self.player_projectiles[projectile] = true
+        self.allies[projectile] = true
     end)
+    self.allies[self.player] = true
     self.enemies = {}
     self.explosions = {}
     return self
 end
 
---- Verifies if something colides with the player
-function Game:verifyPlayerColision()
-    local player_bbox = self.player:getBBox()
-    if hasColision(player_bbox, self.enemies) then
-        self.explosions[Explosion.create(player_bbox)] = true
-        self.player = nil
-    end
+--- Verifies the colisions between the allies and the enemies
+function Game:computeColisions()
 end
 
 --- Updates the game
 function Game:update(dt)
     self.stars:update(dt)
-    updateSet(self.player_projectiles, dt)
+    updateSet(self.allies, dt)
     updateSet(self.enemies, dt)
     updateSet(self.explosions, dt)
-    if self.player then 
-        self.player:update(dt)
-        self:verifyPlayerColision()
+    self:computeColisions()
+
+    if self.player:isDestroyed() then
+        print("Game Over!")
     end
 end
 
@@ -90,21 +77,20 @@ function Game:keypressed(key)
         self.enemies[Asteroid.create()] = true
 
     end
-    if self.player then self.player:keypressed(key) end
+    self.player:keypressed(key)
 end
 
 --- Key released event
 function Game:keyreleased(key)
-    if self.player then self.player:keyreleased(key) end
+    self.player:keyreleased(key)
 end
 
 -- Draws the game
 function Game:draw()
     self.stars:draw()
-    drawSet(self.player_projectiles)
+    drawSet(self.allies)
     drawSet(self.enemies)
     drawSet(self.explosions)
-    if self.player then self.player:draw() end
 end
 
 return Game
