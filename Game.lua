@@ -53,7 +53,6 @@ function Game.create()
 
     -- Asteroid launcher
     self.asteroid_time = 0
-    self.asteroid_next = 0
     return self
 end
 
@@ -81,9 +80,8 @@ function Game:update(dt)
 
     -- Asteroid launcher
     self.asteroid_time = self.asteroid_time + dt
-    if self.asteroid_time > self.asteroid_next then
+    if self.asteroid_time > 2 then
         self.asteroid_time = 0
-        self.asteroid_next = 1
         self.enemies[Asteroid.create()] = true
     end
 end

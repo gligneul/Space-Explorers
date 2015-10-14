@@ -19,7 +19,7 @@ local LaserBeam = Class(SpaceElement)
 
 --- Constants
 LaserBeam.LIFE = 1
-LaserBeam.DAMAGE = 25
+LaserBeam.DAMAGE = 13
 LaserBeam.SPEED = 500
 LaserBeam.HEIGHT = 1
 LaserBeam.WIDTH = 15

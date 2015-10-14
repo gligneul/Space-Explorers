@@ -18,7 +18,7 @@ local Window = require "Window"
 local Player = Class(Ship)
 
 --- Constants
-Player.LIFE = 500
+Player.LIFE = 100
 Player.SPEED_LIMIT = 200
 Player.ACCELERATION = 1000
 Player.IMAGE_PATH = "data/player.png"

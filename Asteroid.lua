@@ -1,6 +1,5 @@
 --[[
     PUC-Rio
-    INF1405 - Construção de Sistemas 2015.2
     Professor Edmundo Torreão
     Gabriel de Quadros Ligneul 1212560
     Exploradores de Andrômeda
@@ -19,8 +18,8 @@ local Window = require "Window"
 local Asteroid = Class(SpaceElement)
 
 --- Constants
-Asteroid.LIFE = 300
-Asteroid.DAMAGE = 99999
+Asteroid.LIFE = 200
+Asteroid.DAMAGE = 300
 Asteroid.ANIMATION_DT = 0.07
 Asteroid.EXPLOSION_DT = 0.02
 
@@ -38,10 +37,12 @@ end
 
 --- Creates an asteroid at random position
 function Asteroid.create()
-    local scale = math.random(300, 600) / 1000
+    local scale = math.random(300, 1000) / 1000
     local life = Asteroid.LIFE * scale
     local images = Asteroid.images[math.random(#Asteroid.images)]
     local self = Asteroid._create(life, Asteroid.DAMAGE)
+    self.original_scale = scale
+    self.scale = scale
     self.w = Asteroid.default_width * scale
     self.h = Asteroid.default_height * scale
     self.x = Window.WIDTH + self.w
@@ -53,9 +54,13 @@ function Asteroid.create()
     self.animation = Animation.create(images, Asteroid.ANIMATION_DT,
             'repeat', self.x, self.y, self.alpha, scale)
     self.explosion = Animation.create(Asteroid.explosion_images,
-            Asteroid.EXPLOSION_DT, 'once', 0, 0, 0,
-            self.w / Asteroid.explosion_width)
+            Asteroid.EXPLOSION_DT, 'once', 0, 0, 0, 0.3)
     return self
+end
+
+--- Obtains the damage caused by the element on hit
+function Asteroid:getDamage()
+    return Asteroid.DAMAGE * self.scale
 end
 
 --- Returns whether the projectile is offscreen
@@ -63,7 +68,7 @@ function Asteroid:isOffscreen()
     return self.x < -self.w or self.explosion:isOver()
 end
 
---- Obtains the asteroidbounding box
+--- Obtains the asteroid bounding box
 function Asteroid:getBBox()
     return Rectangle.create(self.x - self.w / 2, self.y - self.h / 2,
             self.w, self.h)
@@ -74,11 +79,18 @@ end
 ---   dt      Time elapsed in milliseconds
 function Asteroid:update(dt)
     if not self:isDestroyed() then
+        -- Updates the asteroid position
         self.x = self.x - self.speed * dt
         self.alpha = self.alpha + self.rotation_speed * dt
         self.animation:setPosition(self.x)
         self.animation:setOrientation(self.alpha)
         self.animation:update(dt)
+
+        -- Updates the asteroid size
+        local life_percent = (self.life / self.initial_life)
+        self.scale = self.original_scale * life_percent + 0.1
+        self.w = Asteroid.default_width * self.scale
+        self.h = Asteroid.default_height * self.scale
     else
         self.explosion:setPosition(self.x, self.y)
         self.explosion:update(dt)
@@ -88,8 +100,8 @@ end
 --- Draws the asteroid
 function Asteroid:draw()
     if not self:isDestroyed() then
+        self.animation:setScale(self.scale)
         self.animation:draw()
-        SpaceElement.draw(self)
     else
         self.explosion:draw()
     end

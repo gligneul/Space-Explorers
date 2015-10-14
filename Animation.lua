@@ -69,6 +69,12 @@ function Animation:setOrientation(alpha)
     self.alpha = alpha
 end
 
+--- Sets the scale
+---   scale     new Scale
+function Animation:setScale(scale)
+    self.scale = scale
+end
+
 --- Sets the position
 ---   x         Horizontal position (can be nil)
 ---   y         Vertical position (can be nil)
