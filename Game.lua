@@ -128,9 +128,15 @@ end
 
 --- Draws the game over screen
 function Game:drawGameOver()
+    local w = Window.WIDTH
+    local h = Window.HEIGHT
     love.graphics.setColor(255, 255, 255)
     love.graphics.setFont(self.font[128])
-    love.graphics.printf("Game Over", 0, -100 + Window.HEIGHT / 2, Window.WIDTH,
+    love.graphics.printf("Game Over", 0, -64 + h / 2, w, 'center')
+    love.graphics.setFont(self.font[64])
+    love.graphics.printf("Score: " .. self.score, 0, 80 + h / 2, w, 'center')
+    love.graphics.setFont(self.font[32])
+    love.graphics.printf("Press return to play again...", 0, 170 + h / 2, w,
             'center')
 end
 
