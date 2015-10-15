@@ -10,7 +10,7 @@
 
 local Class = require "Class"
 
---- Auxiliary linear interpolation funciton
+--- Auxiliary linear interpolation function
 local function lerp(a,b,t) return (1-t)*a + t*b end
 
 --- Class SpaceElement
@@ -42,6 +42,11 @@ end
 --- Returns whether the element is destroyed
 function SpaceElement:isDestroyed()
     return self.life <= 0
+end
+
+--- Returns the score earned after destroying the element
+function SpaceElement:getScore()
+    return 0
 end
 
 --- Draws the life bar above the element

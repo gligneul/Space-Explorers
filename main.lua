@@ -7,6 +7,7 @@
 
     main.lua
 --]]
+
 local Game = require "Game"
 local Window = require "Window"
 

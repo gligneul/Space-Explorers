@@ -18,8 +18,9 @@ local Window = require "Window"
 local Asteroid = Class(SpaceElement)
 
 --- Constants
-Asteroid.LIFE = 200
+Asteroid.LIFE = 150
 Asteroid.DAMAGE = 300
+Asteroid.SCORE = 100
 Asteroid.ANIMATION_DT = 0.07
 Asteroid.EXPLOSION_DT = 0.02
 
@@ -37,7 +38,7 @@ end
 
 --- Creates an asteroid at random position
 function Asteroid.create()
-    local scale = math.random(300, 1000) / 1000
+    local scale = math.random(30, 100) / 100
     local life = Asteroid.LIFE * scale
     local images = Asteroid.images[math.random(#Asteroid.images)]
     local self = Asteroid._create(life, Asteroid.DAMAGE)
@@ -54,6 +55,11 @@ function Asteroid.create()
     self.animation = Animation.create(images, Asteroid.ANIMATION_DT,
             'repeat', self.x, self.y, self.alpha, scale)
     return self
+end
+
+--- Returns the score earned after destroying the element
+function SpaceElement:getScore()
+    return Asteroid.SCORE * self.original_scale
 end
 
 --- Obtains the damage caused by the element on hit

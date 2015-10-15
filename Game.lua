@@ -75,6 +75,10 @@ function Game:computeColisions()
                and not enemy:isDestroyed() then
                 ally:hit(enemy:getDamage())
                 enemy:hit(ally:getDamage())
+
+                if enemy:isDestroyed() then
+                    self.score = self.score + enemy:getScore()
+                end
             end
         end
     end
