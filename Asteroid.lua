@@ -57,11 +57,6 @@ function Asteroid.create()
     return self
 end
 
---- Returns the score earned after destroying the element
-function SpaceElement:getScore()
-    return Asteroid.SCORE * self.original_scale
-end
-
 --- Obtains the damage caused by the element on hit
 function Asteroid:getDamage()
     return Asteroid.DAMAGE * self.scale
@@ -80,6 +75,21 @@ function Asteroid:hit(damage)
     if self:isDestroyed() then
         self.explosion = Animation.create(Asteroid.explosion_images,
                 Asteroid.EXPLOSION_DT, 'once', self.x, self.y, 0, 0.5)
+    end
+end
+
+--- Returns the score earned after destroying the element
+function SpaceElement:getScore()
+    return Asteroid.SCORE * self.original_scale
+end
+
+--- Draws the asteroid
+function Asteroid:draw()
+    if not self:isDestroyed() then
+        self.animation:setScale(self.scale)
+        self.animation:draw()
+    else
+        self.explosion:draw()
     end
 end
 
@@ -106,16 +116,6 @@ function Asteroid:update(dt)
         self.animation:update(dt)
     else
         self.explosion:update(dt)
-    end
-end
-
---- Draws the asteroid
-function Asteroid:draw()
-    if not self:isDestroyed() then
-        self.animation:setScale(self.scale)
-        self.animation:draw()
-    else
-        self.explosion:draw()
     end
 end
 

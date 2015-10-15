@@ -74,6 +74,18 @@ function Ship:addYForce(f)
     self.yengine:addForce(f)
 end
 
+--- Draws the ship
+function Ship:draw()
+    if not self:isDestroyed() then
+        love.graphics.setColor(255, 255, 255)
+        local x, y = self.xengine:getPosition(), self.yengine:getPosition()
+        love.graphics.draw(self.image, x, y)
+        SpaceElement.draw(self)
+    else
+        self.explosion:draw()
+    end
+end
+
 --- Returns whether the element can be removed from the game
 function Ship:isOffscreen()
     return self.explosion and self.explosion:isOver()
@@ -95,18 +107,6 @@ function Ship:update(dt)
         self.yengine:update(dt)
     else
         self.explosion:update(dt)
-    end
-end
-
---- Draws the ship
-function Ship:draw()
-    if not self:isDestroyed() then
-        love.graphics.setColor(255, 255, 255)
-        local x, y = self.xengine:getPosition(), self.yengine:getPosition()
-        love.graphics.draw(self.image, x, y)
-        SpaceElement.draw(self)
-    else
-        self.explosion:draw()
     end
 end
 

@@ -57,11 +57,10 @@ function Game.create()
     end)
     self.allies[self.player] = true
     self.enemies = {}
-    self.explosions = {}
     self.asteroid_time = 0
     self.start_time = 0
-    self.font = {}
     self.score = 0
+    self.font = {}
     for _, size in ipairs(Game.FONTS_SIZES) do
         self.font[size] = love.graphics.newFont(Game.FONT_PATH, size)
     end
@@ -100,7 +99,6 @@ function Game:update(dt)
     self.stars:update(dt)
     updateSet(self.allies, dt)
     updateSet(self.enemies, dt)
-    updateSet(self.explosions, dt)
     self:computeColisions()
     self:launchAsteroids(dt)
     self.start_time = self.start_time + dt
@@ -167,7 +165,6 @@ function Game:draw()
     self.stars:draw()
     drawSet(self.allies)
     drawSet(self.enemies)
-    drawSet(self.explosions)
     self:drawStartScreen()
     if not self.player:isDestroyed() then
         self:drawScore()

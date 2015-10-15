@@ -49,7 +49,6 @@ function Animation.create(frames, frame_dt, mode, x, y, alpha, scale)
     self.y = y
     self.alpha = alpha
     self.scale = scale
-    self.origin = frames[1]:getWidth() / 2
     return self
 end
 
@@ -93,11 +92,12 @@ end
 --- Draws the current frame
 function Animation:draw()
     if self.mode == 'repeat' or not self:isOver() then
+        local origin = self.frames[1]:getWidth() / 2
         love.graphics.setColor(255, 255, 255)
         local frame_number = self:getFrameNumber()
         local frame = self.frames[1 + (frame_number - 1) % #self.frames]
         love.graphics.draw(frame, self.x, self.y, self.alpha, self.scale, 
-                self.scale, self.origin, self.origin)
+                self.scale, origin, origin)
     end
 end
 
