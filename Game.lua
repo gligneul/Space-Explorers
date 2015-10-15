@@ -18,6 +18,10 @@ local Window = require "Window"
 --- Class Game
 local Game = Class()
 
+--- Constants
+Game.FONT_PATH = "data/zorque.ttf"
+Game.FONTS_SIZES = {8, 16, 24, 32, 64, 128}
+
 --- Auxiliary functions that updates a set
 local function updateSet(set, dt)
     for e in pairs(set) do
@@ -35,11 +39,15 @@ local function drawSet(set)
     end
 end
 
---- Creates a new Game
-function Game.create()
+--- Initializes the game and creates the unique isntance
+function Game.init()
     Asteroid.init()
     Ship.init()
+    Game.instance = Game.create()
+end
 
+--- Creates a new Game
+function Game.create()
     local self = Game._create()
     self.stars = Stars.create()
     self.allies = {}
@@ -49,10 +57,12 @@ function Game.create()
     self.allies[self.player] = true
     self.enemies = {}
     self.explosions = {}
-    self.gameover_font = love.graphics.newFont("data/zorque.ttf", 100)
-
-    -- Asteroid launcher
     self.asteroid_time = 0
+    self.font = {}
+    self.score = 0
+    for _, size in ipairs(Game.FONTS_SIZES) do
+        self.font[size] = love.graphics.newFont(Game.FONT_PATH, size)
+    end
     return self
 end
 
@@ -70,15 +80,8 @@ function Game:computeColisions()
     end
 end
 
---- Updates the game
-function Game:update(dt)
-    self.stars:update(dt)
-    updateSet(self.allies, dt)
-    updateSet(self.enemies, dt)
-    updateSet(self.explosions, dt)
-    self:computeColisions()
-
-    -- Asteroid launcher
+--- Launch asteroids
+function Game:launchAsteroids(dt)
     self.asteroid_time = self.asteroid_time + dt
     if self.asteroid_time > 2 then
         self.asteroid_time = 0
@@ -86,17 +89,49 @@ function Game:update(dt)
     end
 end
 
+--- Updates the game
+function Game:update(dt)
+    self.stars:update(dt)
+    updateSet(self.allies, dt)
+    updateSet(self.enemies, dt)
+    updateSet(self.explosions, dt)
+    self:computeColisions()
+    self:launchAsteroids(dt)
+end
+
 --- Key pressed event
 function Game:keypressed(key)
     if key == 'escape' then
         love.event.quit()
     end
-    self.player:keypressed(key)
+
+    if not self.player:isDestroyed() then
+        self.player:keypressed(key)
+    else
+        if key == 'return' then
+            Game.instance = Game.create()
+        end
+    end
 end
 
 --- Key released event
 function Game:keyreleased(key)
     self.player:keyreleased(key)
+end
+
+--- Draws the current player score
+function Game:drawScore()
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.setFont(self.font[32])
+    love.graphics.print("Score: " .. self.score, 30, 30)
+end
+
+--- Draws the game over screen
+function Game:drawGameOver()
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.setFont(self.font[128])
+    love.graphics.printf("Game Over", 0, -100 + Window.HEIGHT / 2, Window.WIDTH,
+            'center')
 end
 
 -- Draws the game
@@ -106,11 +141,10 @@ function Game:draw()
     drawSet(self.enemies)
     drawSet(self.explosions)
 
-    if self.player:isDestroyed() then
-        love.graphics.setColor(255, 255, 255)
-        love.graphics.setFont(self.gameover_font)
-        love.graphics.printf("Game Over", (Window.WIDTH - 500) / 2,
-                -100 + Window.HEIGHT / 2, 500, 'center')
+    if not self.player:isDestroyed() then
+        self:drawScore()
+    else
+        self:drawGameOver()
     end
 end
 

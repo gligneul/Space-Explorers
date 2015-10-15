@@ -10,27 +10,24 @@
 local Game = require "Game"
 local Window = require "Window"
 
---- Game engine
-local game
-
 function love.load()
-    game = Game.create()
+    Game.init()
     love.window.setMode(Window.WIDTH, Window.HEIGHT)
 end
 
 function love.draw()
-    game:draw()
+    Game.instance:draw()
 end
 
 function love.update(dt)
-    game:update(dt)
+    Game.instance:update(dt)
 end
 
 function love.keypressed(key)
-   game:keypressed(key)
+   Game.instance:keypressed(key)
 end
 
 function love.keyreleased(key)
-    game:keyreleased(key)
+    Game.instance:keyreleased(key)
 end
 
