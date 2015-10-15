@@ -44,9 +44,20 @@ function Ship.create(x, y, xmin, xmax, ymin, ymax, slimit, acc, life, image)
     self.xengine = Engine.create(x, xmin, xmax, slimit, acc)
     self.yengine = Engine.create(y, ymin, ymax, slimit, acc)
     self.image = image
-    self.explosion = Animation.create(Ship.explosion_images, Ship.EXPLOSION_DT,
-            'once', x, y, 0, Ship.explosion_width / image:getWidth())
     return self
+end
+
+--- Draws the damage from the element's life
+function Ship:hit(damage)
+    SpaceElement.hit(self, damage)
+
+    if self:isDestroyed() then
+        local bbox = self:getBBox()
+        local x, y = bbox.x + bbox.w / 2, bbox.y + bbox.h / 2
+        local scale = Ship.explosion_width / self.image:getWidth()
+        self.explosion = Animation.create(Ship.explosion_images,
+                Ship.EXPLOSION_DT, 'once', x, y, 0, scale)
+    end
 end
 
 --- Sets the x force
@@ -65,7 +76,7 @@ end
 
 --- Returns whether the element can be removed from the game
 function Ship:isOffscreen()
-    return self.explosion:isOver()
+    return self.explosion and self.explosion:isOver()
 end
 
 --- Obtains the ship bounding box
@@ -83,9 +94,6 @@ function Ship:update(dt)
         self.xengine:update(dt)
         self.yengine:update(dt)
     else
-        local bbox = self:getBBox()
-        local x, y = bbox.x + bbox.w / 2, bbox.y + bbox.h / 2
-        self.explosion:setPosition(x, y)
         self.explosion:update(dt)
     end
 end

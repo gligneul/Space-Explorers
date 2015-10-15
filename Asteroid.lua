@@ -42,7 +42,7 @@ function Asteroid.create()
     local images = Asteroid.images[math.random(#Asteroid.images)]
     local self = Asteroid._create(life, Asteroid.DAMAGE)
     self.original_scale = scale
-    self.scale = scale
+    self.scale = scale + 0.2
     self.w = Asteroid.default_width * scale
     self.h = Asteroid.default_height * scale
     self.x = Window.WIDTH + self.w
@@ -53,8 +53,6 @@ function Asteroid.create()
             * (math.random(2) == 1 and 1 or -1)
     self.animation = Animation.create(images, Asteroid.ANIMATION_DT,
             'repeat', self.x, self.y, self.alpha, scale)
-    self.explosion = Animation.create(Asteroid.explosion_images,
-            Asteroid.EXPLOSION_DT, 'once', 0, 0, 0, 0.3)
     return self
 end
 
@@ -63,9 +61,25 @@ function Asteroid:getDamage()
     return Asteroid.DAMAGE * self.scale
 end
 
+--- Draws the damage from the element's life
+function Asteroid:hit(damage)
+    SpaceElement.hit(self, damage)
+
+    -- Updates the asteroid size
+    local life_percent = (self.life / self.initial_life)
+    self.scale = self.original_scale * life_percent + 0.2
+    self.w = Asteroid.default_width * self.scale
+    self.h = Asteroid.default_height * self.scale
+
+    if self:isDestroyed() then
+        self.explosion = Animation.create(Asteroid.explosion_images,
+                Asteroid.EXPLOSION_DT, 'once', self.x, self.y, 0, 0.5)
+    end
+end
+
 --- Returns whether the projectile is offscreen
 function Asteroid:isOffscreen()
-    return self.x < -self.w or self.explosion:isOver()
+    return self.x < -self.w or (self.explosion and self.explosion:isOver())
 end
 
 --- Obtains the asteroid bounding box
@@ -79,20 +93,12 @@ end
 ---   dt      Time elapsed in milliseconds
 function Asteroid:update(dt)
     if not self:isDestroyed() then
-        -- Updates the asteroid position
         self.x = self.x - self.speed * dt
         self.alpha = self.alpha + self.rotation_speed * dt
         self.animation:setPosition(self.x)
         self.animation:setOrientation(self.alpha)
         self.animation:update(dt)
-
-        -- Updates the asteroid size
-        local life_percent = (self.life / self.initial_life)
-        self.scale = self.original_scale * life_percent + 0.1
-        self.w = Asteroid.default_width * self.scale
-        self.h = Asteroid.default_height * self.scale
     else
-        self.explosion:setPosition(self.x, self.y)
         self.explosion:update(dt)
     end
 end
