@@ -21,6 +21,7 @@ local Game = Class()
 --- Constants
 Game.FONT_PATH = "data/zorque.ttf"
 Game.FONTS_SIZES = {8, 16, 24, 32, 64, 128}
+Game.START_SCREEN_DURATION = 4
 
 --- Auxiliary functions that updates a set
 local function updateSet(set, dt)
@@ -39,7 +40,7 @@ local function drawSet(set)
     end
 end
 
---- Initializes the game and creates the unique isntance
+--- Initializes the game and creates the unique instance
 function Game.init()
     Asteroid.init()
     Ship.init()
@@ -58,6 +59,7 @@ function Game.create()
     self.enemies = {}
     self.explosions = {}
     self.asteroid_time = 0
+    self.start_time = 0
     self.font = {}
     self.score = 0
     for _, size in ipairs(Game.FONTS_SIZES) do
@@ -101,6 +103,7 @@ function Game:update(dt)
     updateSet(self.explosions, dt)
     self:computeColisions()
     self:launchAsteroids(dt)
+    self.start_time = self.start_time + dt
 end
 
 --- Key pressed event
@@ -121,6 +124,21 @@ end
 --- Key released event
 function Game:keyreleased(key)
     self.player:keyreleased(key)
+end
+
+--- Draws the start screen
+function Game:drawStartScreen()
+    if self.start_time < Game.START_SCREEN_DURATION then
+        local w = Window.WIDTH
+        local h = Window.HEIGHT
+        local alpha = (255 - self.start_time * 255 / Game.START_SCREEN_DURATION)
+        love.graphics.setColor(255, 255, 255, alpha)
+        love.graphics.setFont(self.font[128])
+        love.graphics.printf("Space Explorers", 0, -128 + h / 2, w, 'center')
+        love.graphics.setFont(self.font[32])
+        local controls = "Controls:\nArrows - move arround\nSpace bar - shoot"
+        love.graphics.printf(controls, 0, 150 + h / 2, w, 'center')
+    end
 end
 
 --- Draws the current player score
@@ -150,7 +168,7 @@ function Game:draw()
     drawSet(self.allies)
     drawSet(self.enemies)
     drawSet(self.explosions)
-
+    self:drawStartScreen()
     if not self.player:isDestroyed() then
         self:drawScore()
     else
