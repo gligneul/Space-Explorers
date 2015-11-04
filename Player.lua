@@ -11,6 +11,7 @@
 local Class = require "Class"
 local LaserBeam = require "LaserBeam"
 local Ship = require "Ship"
+local Vector = require "Vector"
 local Window = require "Window"
 
 --- Class Player
@@ -63,7 +64,7 @@ function Player:keypressed(key)
     elseif key == Player.KEY_SHOOT then
         local bbox = self:getBBox()
         local x, y = bbox.x + bbox.w, bbox.y + bbox.h / 2
-        local laser = LaserBeam.create(x, y, 'right', {0, 255, 0})
+        local laser = LaserBeam.create(x, y, Vector.create(1, 0), {0, 255, 0})
         self.shootCallback(laser)
     end
 end

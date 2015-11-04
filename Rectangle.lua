@@ -10,7 +10,7 @@
 
 local Class = require "Class"
 
---- Class Animation
+--- Class Rectangle
 local Rectangle = Class()
 
 --- Creates an new Rectangle

@@ -72,7 +72,7 @@ function Game.create()
     end
 
     -- Sends an alien
-    self.enemies[Alien.create(createShootCb(self.enemie), self.player)] = true
+    self.enemies[Alien.create(createShootCb(self.enemies), self.player)] = true
     return self
 end
 
