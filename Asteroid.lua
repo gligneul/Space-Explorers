@@ -38,7 +38,7 @@ end
 
 --- Creates an asteroid at random position
 function Asteroid.create()
-    local scale = math.random(30, 100) / 100
+    local scale = math.random(30, 70) / 100
     local life = Asteroid.LIFE * scale
     local images = Asteroid.images[math.random(#Asteroid.images)]
     local self = Asteroid._create(life, Asteroid.DAMAGE)
@@ -79,7 +79,7 @@ function Asteroid:hit(damage)
 end
 
 --- Returns the score earned after destroying the element
-function SpaceElement:getScore()
+function Asteroid:getScore()
     return Asteroid.SCORE * self.original_scale
 end
 

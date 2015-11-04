@@ -8,6 +8,7 @@
     Game.lua
 --]]
 
+local Alien = require "Alien"
 local Asteroid = require "Asteroid"
 local Class = require "Class"
 local Player = require "Player"
@@ -40,6 +41,13 @@ local function drawSet(set)
     end
 end
 
+--- Creates a shoot callback
+local function createShootCb(projectiles)
+    return function(p)
+        projectiles[p] = true
+    end
+end
+
 --- Initializes the game and creates the unique instance
 function Game.init()
     Asteroid.init()
@@ -52,9 +60,7 @@ function Game.create()
     local self = Game._create()
     self.stars = Stars.create()
     self.allies = {}
-    self.player = Player.create(function(projectile)
-        self.allies[projectile] = true
-    end)
+    self.player = Player.create(createShootCb(self.allies))
     self.allies[self.player] = true
     self.enemies = {}
     self.asteroid_time = 0
@@ -64,6 +70,9 @@ function Game.create()
     for _, size in ipairs(Game.FONTS_SIZES) do
         self.font[size] = love.graphics.newFont(Game.FONT_PATH, size)
     end
+
+    -- Sends an alien
+    self.enemies[Alien.create(createShootCb(self.enemie), self.player)] = true
     return self
 end
 

@@ -31,15 +31,19 @@ end
 --- Parameters
 ---   x         Initial horizontal position
 ---   y         Initial vertial position
----   xmin      Minimum x position
----   xmax      Maximum x position
----   ymin      Minimum y position
----   ymax      Maximum y position
+---   xmin      Minimum x position (default = -huge)
+---   xmax      Maximum x position (default = +huge)
+---   ymin      Minimum y position (default = -huge)
+---   ymax      Maximum y position (default = +huge)
 ---   slimit    Speed absolute maximum
 ---   acc       Acceleration constant
 ---   life      Ship's initial life
 ---   image     Path for image that will be drawn
 function Ship.create(x, y, xmin, xmax, ymin, ymax, slimit, acc, life, image)
+    xmin = xmin or -math.huge
+    xmax = xmax or math.huge
+    ymin = ymin or -math.huge
+    ymax = ymax or math.huge
     local self = Ship._create(life, Ship.DAMAGE)
     self.xengine = Engine.create(x, xmin, xmax, slimit, acc)
     self.yengine = Engine.create(y, ymin, ymax, slimit, acc)
@@ -54,7 +58,7 @@ function Ship:hit(damage)
     if self:isDestroyed() then
         local bbox = self:getBBox()
         local x, y = bbox.x + bbox.w / 2, bbox.y + bbox.h / 2
-        local scale = Ship.explosion_width / self.image:getWidth()
+        local scale = self.image:getHeight() / Ship.explosion_width
         self.explosion = Animation.create(Ship.explosion_images,
                 Ship.EXPLOSION_DT, 'once', x, y, 0, scale)
     end
