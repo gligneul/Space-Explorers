@@ -76,6 +76,11 @@ function Engine:addForce(f)
     self.f = self.f + f
 end
 
+--- Sets f as the current force
+function Engine:setForce(f)
+    self.f = f
+end
+
 --- Obtains the position of the engine
 function Engine:getPosition()
     return self.p

@@ -64,16 +64,18 @@ function Ship:hit(damage)
     end
 end
 
---- Sets the x force
---- Parameters
----   f     Force beeing applied
+--- Sets the vertical or horizontal force
+function Ship:setXForce(f)
+    self.xengine:setForce(f)
+end
+function Ship:setYForce(f)
+    self.yengine:setForce(f)
+end
+
+--- Accumulates to the vertical or horizontal force
 function Ship:addXForce(f)
     self.xengine:addForce(f)
 end
-
---- Sets the y force
---- Parameters
----   f     Force beeing applied
 function Ship:addYForce(f)
     self.yengine:addForce(f)
 end
