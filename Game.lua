@@ -11,6 +11,7 @@
 local Alien = require "Alien"
 local Asteroid = require "Asteroid"
 local Class = require "Class"
+local Pirate = require "Pirate"
 local Player = require "Player"
 local Ship = require "Ship"
 local Stars = require "Stars"
@@ -70,9 +71,6 @@ function Game.create()
     for _, size in ipairs(Game.FONTS_SIZES) do
         self.font[size] = love.graphics.newFont(Game.FONT_PATH, size)
     end
-
-    -- Sends an alien
-    self.enemies[Alien.create(createShootCb(self.enemies), self.player)] = true
     return self
 end
 
@@ -103,6 +101,16 @@ function Game:launchAsteroids(dt)
     end
 end
 
+--- Launch a random enemy
+function Game:launchEnemies()
+    local enemy_classes = {Alien, Pirate}
+    if not self.curr_enemy or self.curr_enemy:isOffscreen() then
+        local class = enemy_classes[math.random(#enemy_classes)]
+        self.curr_enemy = class.create(createShootCb(self.enemies), self.player)
+        self.enemies[self.curr_enemy] = true
+    end
+end
+
 --- Updates the game
 function Game:update(dt)
     self.stars:update(dt)
@@ -110,6 +118,7 @@ function Game:update(dt)
     updateSet(self.enemies, dt)
     self:computeColisions()
     self:launchAsteroids(dt)
+    self:launchEnemies()
     self.start_time = self.start_time + dt
 end
 

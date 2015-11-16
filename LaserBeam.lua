@@ -21,7 +21,7 @@ local LaserBeam = Class(SpaceElement)
 --- Constants
 LaserBeam.LIFE = 1
 LaserBeam.DAMAGE = 13
-LaserBeam.SPEED = 250
+LaserBeam.SPEED = 300
 LaserBeam.LENGTH = 15
 
 --- Creates a LaserBeam

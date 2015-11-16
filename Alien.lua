@@ -51,7 +51,7 @@ function Alien:moviment(dt)
     local player_bbox = self.player:getBBox()
 
     -- Horizontal moviment
-    if self.stop_moving == false and bbox.x < 850 then
+    if not self.stop_moving and bbox.x < 850 then
         self.stop_moving = true
         self:setXForce(0)
     end
